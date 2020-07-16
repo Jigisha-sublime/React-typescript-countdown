@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import moment, { months } from "moment";
+import moment from "moment";
 import SvgCircle, { mapNumber } from "./SvgCircle";
 
 interface Props {
