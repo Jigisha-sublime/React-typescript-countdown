@@ -1,6 +1,11 @@
-import React from 'react'
+import React from "react";
 
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+function polarToCartesian(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  angleInDegrees: number
+) {
   var angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
 
   return {
@@ -9,15 +14,21 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
   };
 }
 
-function describeArc(x, y, radius, startAngle, endAngle) {
+function describeArc(
+  x: number,
+  y: number,
+  radius: number,
+  startAngle: number,
+  endAngle: number
+) {
   var start = polarToCartesian(x, y, radius, endAngle);
   var end = polarToCartesian(x, y, radius, startAngle);
-  var largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+  var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
   var d = [
-    'M',
+    "M",
     start.x,
     start.y,
-    'A',
+    "A",
     radius,
     radius,
     0,
@@ -25,18 +36,24 @@ function describeArc(x, y, radius, startAngle, endAngle) {
     0,
     end.x,
     end.y
-  ].join(' ');
+  ].join(" ");
 
   return d;
 }
 
-export function mapNumber(number, in_min, in_max, out_min, out_max) {
+export function mapNumber(
+  number: number | any,
+  in_min: number,
+  in_max: number,
+  out_min: number,
+  out_max: number
+) {
   return (
     ((number - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
   );
 }
 
-const SvgCircle = ({ radius }) => {
+const SvgCircle = ({ radius }: { radius: number }) => {
   return (
     <svg className="countdown-svg">
       <path
@@ -46,7 +63,7 @@ const SvgCircle = ({ radius }) => {
         d={describeArc(50, 50, 48, 0, radius)}
       />
     </svg>
-  )
-}
+  );
+};
 
-export default SvgCircle
+export default SvgCircle;

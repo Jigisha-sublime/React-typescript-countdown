@@ -1,27 +1,43 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-import SvgCircle, { mapNumber } from './SvgCircle'
+import React, { Component } from "react";
+import moment from "moment";
+import SvgCircle, { mapNumber } from "./SvgCircle";
 
-class CountDownClass extends Component {
-
+interface CountDownClassProps {
+  timeTillDate: string;
+  timeFormat: "MM DD YYYY, h:mm a";
+}
+interface CountDownClassState {
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+  months: string;
+}
+class CountDownClass extends Component<
+  CountDownClassProps,
+  CountDownClassState
+> {
   state = {
-    days: undefined,
-    hours: undefined,
-    minutes: undefined,
-    seconds: undefined
+    days: "",
+    hours: "",
+    minutes: "",
+    seconds: "",
+    months: ""
   };
+  interval: NodeJS.Timeout | undefined;
 
   componentDidMount() {
     this.interval = setInterval(() => {
       const { timeTillDate, timeFormat } = this.props;
       const then = moment(timeTillDate, timeFormat);
       const now = moment();
-      const countdown = moment(then - now);
-      const days = countdown.format('D');
-      const hours = countdown.format('HH');
-      const minutes = countdown.format('mm');
-      const seconds = countdown.format('ss');
-      this.setState({ days, hours, minutes, seconds });
+      const countdown = moment(then.valueOf() - now.valueOf());
+      const months = countdown.format("MM");
+      const days = countdown.format("D");
+      const hours = countdown.format("HH");
+      const minutes = countdown.format("mm");
+      const seconds = countdown.format("ss");
+      this.setState({ months, days, hours, minutes, seconds });
     }, 1000);
   }
 
@@ -31,7 +47,8 @@ class CountDownClass extends Component {
     }
   }
   render() {
-    const { days, hours, minutes, seconds } = this.state;
+    const { days, hours, minutes, seconds, months } = this.state;
+    const monthsRadius = mapNumber(months, 30, 0, 0, 360);
     const daysRadius = mapNumber(days, 30, 0, 0, 360);
     const hoursRadius = mapNumber(hours, 24, 0, 0, 360);
     const minutesRadius = mapNumber(minutes, 60, 0, 0, 360);
@@ -41,6 +58,13 @@ class CountDownClass extends Component {
       <div>
         <h1>Countdown Class</h1>
         <div className="countdown-wrapper">
+          {months && (
+            <div className="countdown-item">
+              <SvgCircle radius={monthsRadius} />
+              {months}
+              <span>months</span>
+            </div>
+          )}
           {days && (
             <div className="countdown-item">
               <SvgCircle radius={daysRadius} />
@@ -71,7 +95,7 @@ class CountDownClass extends Component {
           )}
         </div>
       </div>
-    )
+    );
   }
 }
 export default CountDownClass;
